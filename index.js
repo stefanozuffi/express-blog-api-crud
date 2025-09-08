@@ -53,13 +53,20 @@ const postsArray = [
 
 
 // ROUTES FOR POSTS
+
+blogServer.get('/api/', (req, res) => {
+    res.send('Benevenuto nel server del mio blog')
+})
+
 //Index
 blogServer.get('/api/posts', (req, res) => {
-    res.send('Lista dei post')
+    res.json(postsArray)
 })
 //Show
 blogServer.get('/api/posts/:id', (req, res) => {
-    res.send('Visualizzazione post ' + req.params.id)
+    const postID = parseInt(req.params.id)
+    const thisPost = postsArray.find(post => post.id === postID)
+    res.json(thisPost)
 })
 //Store
 blogServer.post('/api/posts', (req, res) => {
