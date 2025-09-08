@@ -53,3 +53,27 @@ const postsArray = [
 
 
 // ROUTES FOR POSTS
+//Index
+blogServer.get('/api/posts', (req, res) => {
+    res.send('Lista dei post')
+})
+//Show
+blogServer.get('/api/posts/:id', (req, res) => {
+    res.send('Visualizzazione post ' + req.params.id)
+})
+//Store
+blogServer.post('/api/posts', (req, res) => {
+    res.send('Creazione nuovo post')
+} )
+//Update
+blogServer.put('/api/posts/:id', (req, res) => {
+    res.send('Modifica del post ' + req.params.id)
+})
+//Modify
+blogServer.patch('/api/posts/:id', (req, res) => {
+    res.send('Modifica parziale del post ' + req.params.id)
+})
+//Destroy
+blogServer.delete('/api/posts/:id', (req, res) => {
+    res.send('Cancellazione del post ' + req.params.id)
+})
