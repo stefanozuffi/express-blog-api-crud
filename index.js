@@ -16,6 +16,5 @@ blogServer.get('/api/', (req, res) => {
     res.send('Benevenuto nel server del mio blog')
 })
 
-
 // ROUTES FOR POSTS
 blogServer.use('/api/posts', postsRouter)

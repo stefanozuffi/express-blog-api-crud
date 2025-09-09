@@ -20,7 +20,7 @@ const postsArray = [
         id: 3,
         title: 'Post 3',
         content: 'Contenuto del post 3',
-        img: 'images/pane_fritto_dolce.jpeg',
+        img: 'images/pane_fritto_dolce.jpeg', 
         tags: ['cucina', 'dolci', 'snack']
     },
     {
@@ -44,16 +44,47 @@ const postsArray = [
 router.get('/', (req, res) => {
     res.json(postsArray)
 })
+
 //Show
 router.get('/:id', (req, res) => {
+
     const postID = parseInt(req.params.id)
     const thisPost = postsArray.find(post => post.id === postID)
-    res.json(thisPost)
+
+    if (!thisPost) {
+        res.json({
+            error: 'Post not Found',
+            status: 404
+        })
+    } else {
+        res.json(thisPost)
+    }
+    
 })
+
 //Store
 router.post('/', (req, res) => {
-    res.send('Creazione nuovo post')
-} )
+
+    const newId = postsArray.length
+    const newTitle = `Post ${newId}`
+    const newContent = `Contenuto del ${newTitle}`
+    const newImg = 'some_url'
+    const newTags = ['cucina']
+
+    const newPost = {
+        id: newId,
+        title: newTitle,
+        content: newContent,
+        img: newImg,
+        tags: newTags
+    }
+
+    postsArray.push(newPost)
+
+    res.json(newPost)
+
+})
+
 //Update
 router.put('/:id', (req, res) => {
     res.send('Modifica del post ' + req.params.id)
