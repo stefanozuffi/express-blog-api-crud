@@ -52,7 +52,7 @@ router.get('/:id', (req, res) => {
     const thisPost = postsArray.find(post => post.id === postID)
 
     if (!thisPost) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: 'Post non trovato' 
         })
@@ -83,8 +83,10 @@ router.post('/', (req, res) => {
     }
 
     // Creazione nuovo Post
+    const maxID = Math.max(...postsArray.map(post => post.id))
+
     const newPost = {
-        id: postsArray.length,
+        id: maxID + 1,
         title: title,
         content: content,
         img: img,
@@ -92,7 +94,10 @@ router.post('/', (req, res) => {
     }
 
     postsArray.push(newPost)
-    res.json(newPost)
+    res.json({
+        new_post: newPost,
+        updated_array: postsArray
+    })
 
 
 //IMPLEMENTAZIONE ELEMENTARE
@@ -127,7 +132,21 @@ router.patch('/:id', (req, res) => {
 
 //Destroy
 router.delete('/:id', (req, res) => {
-    res.send('Cancellazione del post ' + req.params.id)
+    const postID = parseInt(req.params.id)
+    const postIndex = postsArray.findIndex(post => post.id === postID)
+
+    if (!thisPost) {
+        res.status(404).json({
+            success: false,
+            message: 'Post non trovato' 
+        })
+    } else {
+        const deletedPost = postsArray.splice(postIndex, 1)[0]
+        res.json({
+            destroyed_post: deletedPost,
+            updated_array: postsArray
+        })
+    }
 })
 
 
