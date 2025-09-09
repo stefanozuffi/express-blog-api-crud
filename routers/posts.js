@@ -52,9 +52,9 @@ router.get('/:id', (req, res) => {
     const thisPost = postsArray.find(post => post.id === postID)
 
     if (!thisPost) {
-        res.json({
-            error: 'Post not Found',
-            status: 404
+        res.status(400).json({
+            success: false,
+            message: 'Post non trovato' 
         })
     } else {
         res.json(thisPost)
@@ -65,23 +65,53 @@ router.get('/:id', (req, res) => {
 //Store
 router.post('/', (req, res) => {
 
-    const newId = postsArray.length
-    const newTitle = `Post ${newId}`
-    const newContent = `Contenuto del ${newTitle}`
-    const newImg = 'some_url'
-    const newTags = ['cucina']
+    const { title, img, tags, content } = req.body;
 
+    //Request Error Handling
+    if (!title || !content) {
+        res.status(400).json({
+            success: false,
+            message: 'Title e Content sono obbligatori'
+        })
+    }
+
+    if (typeof img !== 'string') {
+        res.status(400).json({
+            success: false,
+            message: 'Img deve essere una stringa'
+        })
+    }
+
+    // Creazione nuovo Post
     const newPost = {
-        id: newId,
-        title: newTitle,
-        content: newContent,
-        img: newImg,
-        tags: newTags
+        id: postsArray.length,
+        title: title,
+        content: content,
+        img: img,
+        tags: Array.isArray(tags) ? tags : []
     }
 
     postsArray.push(newPost)
-
     res.json(newPost)
+
+
+//IMPLEMENTAZIONE ELEMENTARE
+    // const newId = postsArray.length
+    // const newTitle = `Post ${newId}`
+    // const newContent = `Contenuto del ${newTitle}`
+    // const newImg = 'some_url'
+    // const newTags = ['cucina']
+
+    // const newPost = {
+    //     id: newId,
+    //     title: newTitle,
+    //     content: newContent,
+    //     img: newImg,
+    //     tags: newTags
+    // }
+
+    // postsArray.push(newPost)
+    // res.json(newPost)
 
 })
 
@@ -89,10 +119,12 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
     res.send('Modifica del post ' + req.params.id)
 })
+
 //Modify
 router.patch('/:id', (req, res) => {
     res.send('Modifica parziale del post ' + req.params.id)
 })
+
 //Destroy
 router.delete('/:id', (req, res) => {
     res.send('Cancellazione del post ' + req.params.id)
