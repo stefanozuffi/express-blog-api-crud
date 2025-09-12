@@ -1,157 +1,28 @@
 const express = require('express')
 const router = express.Router()
 
-const postsArray = [
-    {
-        id: 1,
-        title: 'Post 1',
-        content: 'Contenuto del post 1',
-        img: 'images/ciambellone.jpeg',
-        tags: ['cucina', 'dolci', 'colazione']
-    },
-    {
-        id: 2,
-        title: 'Post 2',
-        content: 'Contenuto del post 2',
-        img: 'images/cracker_barbabietola.jpeg',
-        tags: ['cucina', 'salato', 'snack']
-    },
-    {
-        id: 3,
-        title: 'Post 3',
-        content: 'Contenuto del post 3',
-        img: 'images/pane_fritto_dolce.jpeg', 
-        tags: ['cucina', 'dolci', 'snack']
-    },
-    {
-        id: 4,
-        title: 'Post 4',
-        content: 'Contenuto del post 4',
-        img: 'images/pasta_barbabietola.jpeg',
-        tags: ['cucina', 'salato', 'primi']
-    },
-    {
-        id: 5,
-        title: 'Post 5',
-        content: 'Contenuto del post 5',
-        img: 'images/torta_paesana.jpeg',
-        tags: ['cucina', 'dolci', 'dessert']
-    }
-   
-]
+const {postsArray} = require('../data/postsArray.js')
+
+const postController = require('../controllers/postController.js')
+
 
 //Index
-router.get('/', (req, res) => {
-    res.json(postsArray)
-})
+router.get('/', postController.index)
 
 //Show
-router.get('/:id', (req, res) => {
-
-    const postID = parseInt(req.params.id)
-    const thisPost = postsArray.find(post => post.id === postID)
-
-    if (!thisPost) {
-        res.status(404).json({
-            success: false,
-            message: 'Post non trovato' 
-        })
-    } else {
-        res.json(thisPost)
-    }
-    
-})
+router.get('/:id', postController.show)
 
 //Store
-router.post('/', (req, res) => {
-
-    const { title, img, tags, content } = req.body;
-
-    //Request Error Handling
-    if (!title || !content) {
-        res.status(400).json({
-            success: false,
-            message: 'Title e Content sono obbligatori'
-        })
-    }
-
-    if (typeof img !== 'string') {
-        res.status(400).json({
-            success: false,
-            message: 'Img deve essere una stringa'
-        })
-    }
-
-    // Creazione nuovo Post
-    const maxID = Math.max(...postsArray.map(post => post.id))
-
-    const newPost = {
-        id: maxID + 1,
-        title: title,
-        content: content,
-        img: img,
-        tags: Array.isArray(tags) ? tags : []
-    }
-
-    postsArray.push(newPost)
-    res.json({
-        new_post: newPost,
-        updated_array: postsArray
-    })
-
-
-//IMPLEMENTAZIONE ELEMENTARE
-    // const newId = postsArray.length
-    // const newTitle = `Post ${newId}`
-    // const newContent = `Contenuto del ${newTitle}`
-    // const newImg = 'some_url'
-    // const newTags = ['cucina']
-
-    // const newPost = {
-    //     id: newId,
-    //     title: newTitle,
-    //     content: newContent,
-    //     img: newImg,
-    //     tags: newTags
-    // }
-
-    // postsArray.push(newPost)
-    // res.json(newPost)
-
-})
+router.post('/', postController.store)
 
 //Update
-router.put('/:id', (req, res) => {
-    res.send('Modifica del post ' + req.params.id)
-})
+router.put('/:id', postController.update)
 
 //Modify
-router.patch('/:id', (req, res) => {
-    res.send('Modifica parziale del post ' + req.params.id)
-})
+router.patch('/:id', postController.modify)
 
 //Destroy
-router.delete('/:id', (req, res) => {
-    const postID = parseInt(req.params.id)
-    const postIndex = postsArray.findIndex(post => post.id === postID)
-
-    if (!thisPost) {
-        res.status(404).json({
-            success: false,
-            message: 'Post non trovato' 
-        })
-    } else {
-        const deletedPost = postsArray.splice(postIndex, 1)[0]
-        res.json({
-            destroyed_post: deletedPost,
-            updated_array: postsArray
-        })
-    }
-})
-
-
-// Prova per Push
-
+router.delete('/:id', postController.destroy)
 
 
 
