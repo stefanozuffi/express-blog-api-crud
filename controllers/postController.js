@@ -83,21 +83,22 @@ function modify(req, res) {
 }
 
 function destroy(req, res) {
+
     const postID = parseInt(req.params.id)
     const postIndex = postsArray.findIndex(post => post.id === postID)
 
-    const deletedPost = postsArray.splice(postIndex, 1)[0]
-    if (!deletedPost) {
+
+    if (postIndex === -1) {
         res.status(404).json({
             success: false,
             message: 'Post non trovato' 
         })
     } 
 
-    res.json({
-        destroyed_post: deletedPost,
-        updated_array: postsArray
-    })
+    postsArray.splice(postIndex, 1)
+    console.log(postsArray)
+
+    res.sendStatus(204)
     
 }
 

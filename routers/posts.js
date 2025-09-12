@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-const {postsArray} = require('../data/postsArray.js')
-
 const postController = require('../controllers/postController.js')
 
 
