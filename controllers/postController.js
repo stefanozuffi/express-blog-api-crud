@@ -1,7 +1,13 @@
 const {postsArray} = require('../data/postsArray.js')
 
 function index(req,res) {
-        res.json(postsArray)
+
+        let resArray = postsArray
+        if (req.query.tag) {
+            resArray = postsArray.filter(post => post.tags.includes(req.query.tag))
+            console.log(req.query.tag)
+        }
+        res.json(resArray)
 }
 
 function show(req, res) {
