@@ -85,6 +85,7 @@ function update(req, res) {
     const post = postsArray.find(p => p.id === parseInt(id))
 
     //Error Handling
+    //Post non trovato
     if (!post) {
         res.status(404).json({
             error: true,
@@ -93,17 +94,56 @@ function update(req, res) {
     }
 
     //Modifica del post
-    post.title = req.body.title
-    post.content = req.body.content
-    post.img = req.body.img
-    post.tags = req.body.tags
+    for (let key in post) {
+
+        if (key === 'id') {
+            continue
+        }
+
+        if (!req.body.hasOwnProperty(key)) {
+            res.status(400).json({
+                error: true,
+                message: 'Parametri della richiesta incompleti: usare rotta Patch o modificare il body della request.'
+            })
+        } 
+
+        post[key] = req.body[key]
+    }
+    //N.B.: per gestire richieste incomplete, sotto commentato c'è il modo fatto in classe
+
+
+    // post.title = req.body.title
+    // post.content = req.body.content
+    // post.img = req.body.img
+    // post.tags = req.body.tags
 
     console.log(postsArray)
     res.status(200).json(post)
 }
 
 function modify(req, res) {
-    res.send('Modifica parziale del post ' + req.params.id)
+
+    const {id} = req.params
+    const post = postsArray.find(p => p.id === parseInt(id))
+
+    //Error Handling
+    if (!post) {
+        res.status(404).json({
+            error: true,
+            message: 'Post non trovato'
+        })
+    }
+
+    //Modifica parziale del post
+    for (let key in req.body) {
+        if (post.hasOwnProperty(key)) {
+            post[key] = req.body[key]
+        }
+    }
+
+    console.log(postsArray)
+    res.status(200).json(post)
+    //res.send('Modifica parziale del post ' + req.params.id)
 }
 
 function destroy(req, res) {
