@@ -101,7 +101,7 @@ function update(req, res) {
         }
 
         if (!req.body.hasOwnProperty(key)) {
-            res.status(400).json({
+            return res.status(400).json({
                 error: true,
                 message: 'Parametri della richiesta incompleti: usare rotta Patch o modificare il body della request.'
             })
