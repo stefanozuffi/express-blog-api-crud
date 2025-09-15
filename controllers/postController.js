@@ -80,7 +80,26 @@ function store(req, res) {
 }
 
 function update(req, res) {
-    res.send('Modifica del post ' + req.params.id)
+
+    const {id} = req.params
+    const post = postsArray.find(p => p.id === parseInt(id))
+
+    //Error Handling
+    if (!post) {
+        res.status(404).json({
+            error: true,
+            message: 'Post non trovato'
+        })
+    }
+
+    //Modifica del post
+    post.title = req.body.title
+    post.content = req.body.content
+    post.img = req.body.img
+    post.tags = req.body.tags
+
+    console.log(postsArray)
+    res.status(200).json(post)
 }
 
 function modify(req, res) {
