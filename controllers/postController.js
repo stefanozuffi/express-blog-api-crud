@@ -28,7 +28,7 @@ function show(req, res) {
 function store(req, res) {
     const { title, img, tags, content } = req.body;
 
-    //Request Error Handling
+    //Request Error Handling 
     if (!title || !content) {
         res.status(400).json({
             success: false,
@@ -55,10 +55,9 @@ function store(req, res) {
     }
 
     postsArray.push(newPost)
-    res.json({
-        new_post: newPost,
-        updated_array: postsArray
-    })
+    console.log(postsArray);
+    
+    res.status(201).json(newPost)
 
     //IMPLEMENTAZIONE ELEMENTARE
     // const newId = postsArray.length
