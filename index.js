@@ -2,6 +2,8 @@ const express = require('express')
 const blogServer = express()
 const port = 3000
 const postsRouter = require('./routers/posts.js') 
+const serverError = require('./middlewares/serverError.js')
+const notFoundErr = require('./middlewares/notFoundErr.js')
 
 // Listen
 blogServer.listen(port, () => {
@@ -20,5 +22,11 @@ blogServer.get('/api/', (req, res) => {
     res.send('Benevenuto nel server del mio blog')
 })
 
-// ROUTES FOR POSTS
+//ROUTES FOR POSTS
 blogServer.use('/api/posts', postsRouter)
+
+//Error Handler (500)
+blogServer.use(serverError)
+
+//Error Handler(404-EndPoint)
+blogServer.use(notFoundErr)
